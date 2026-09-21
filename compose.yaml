@@ -1,0 +1,16 @@
+services:
+  queue-terminal:
+    build: .
+    ports: ["18202:18202"]
+    environment:
+      PORT: 18202
+      QUEUE_API_KEY: ${QUEUE_API_KEY:-zhuatech-demo-key}
+      QUEUE_DATA_FILE: /app/data/queue.json
+    volumes: ["queue-data:/app/data"]
+    healthcheck:
+      test: ["CMD","wget","-qO-","http://127.0.0.1:18202/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  queue-data:
